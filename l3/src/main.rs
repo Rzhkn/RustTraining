@@ -1,37 +1,33 @@
 fn main() {
-    let x=1234567;
-    let a=2;
-    let b=3;
+    let x: u64 = 123456789123456789;
+    let a: u64 = 1;
+    let b: u64 = 18;
 
     let size=count_raz(x);
-    if size>0 && a<=size && b<=size {
-        println!("{}",swap(x,a,b,size));
+    if size>0 && a>0 && b>0 && a<=size.into() && b<=size.into() {
+        println!("{}",swap(x,a,b,size as u64));
     }
     else {
         println!("n/a");
     }
 }
 
-fn swap (mut x: u64, a:u8, b:u8, size:u8) -> u64{
-    let mut mas: [u8;size];
+fn swap (mut x: u64, a:u64, b:u64, size:u64) -> u64{
+    let mut mas: Vec<u64> = Vec::new();
 
-    for ind in 0..size {
-        mas[size-1-ind]=x%10;
+    while x!=0 {
+        mas.push(x%10);
         x/=10;
     }
 
-    let temp = mas[a];
-    mas[a]=mas[b];
-    mas[b]=temp;
+    let temp = mas[(size - a) as usize];
+    mas[(size - a) as usize]=mas[(size - b) as usize];
+    mas[(size - b) as usize]=temp;
 
-    for ind in 0..size {
-        if ind==0 {
-            x=mas[0];
-        }
-        else {
-            x*=10;
-            x+=mas[ind];
-        }
+    x=mas.pop().unwrap();
+    while mas.len()>0 {
+        x*=10;
+        x+=mas.pop().unwrap();
     }
 
     x
